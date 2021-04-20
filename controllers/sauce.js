@@ -49,3 +49,30 @@ exports.getAllStuff = (req, res, next) => {
         .then((sauces) => res.status(200).json(sauces))
         .catch((error) => res.status(400).json({ error: error }));
 };
+
+
+exports.likes = (req, res, next) => {
+    const userId = req.body.userId;
+    const like = req.body.like;
+
+    Sauce.findOne({ _id: req.params.id })
+        .then(sauce => {
+            if (userId) {
+                if (like === 1) {
+                    Sauce.updateOne({ _id: req.params.id }, { $push: { usersLiked: userId }, $inc: { likes: 1 } })
+                        .then(() => res.status(200).json({ message: 'Sauce Liked' }))
+                        .catch((error) => res.status(400).json({ error: error }))
+                } else if (like === -1) {
+                    Sauce.updateOne({ _id: req.params.id }, { $push: { usersDisliked: userId }, $inc: { dislikes: 1 } })
+                        .then(() => res.status(200).json({ message: 'Sauce Disliked' }))
+                        .catch((error) => res.status(400).json({ error: error }))
+                } else if (like === 0) {
+                    Sauce.updateOne({ _id: req.params.id }, { $pull: { usersLiked: userId, usersDisliked: userId }, $inc: { dislikes: 0, likes: 0 } })
+                        .then(() => res.status(200).json({ message: 'Sauce Disliked' }))
+                        .catch((error) => res.status(400).json({ error: error }))
+                }
+            }
+        })
+
+
+}
