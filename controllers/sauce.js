@@ -54,9 +54,10 @@ exports.getAllStuff = (req, res, next) => {
 exports.likes = (req, res, next) => {
     const userId = req.body.userId;
     const like = req.body.like;
-
+    const nbLiked = req.params.usersLiked;
+    console.log(like, nbLiked);
     Sauce.findOne({ _id: req.params.id })
-        .then(sauce => {
+        .then(() => {
             if (userId) {
                 if (like === 1) {
                     Sauce.updateOne({ _id: req.params.id }, { $push: { usersLiked: userId }, $inc: { likes: 1 } })
