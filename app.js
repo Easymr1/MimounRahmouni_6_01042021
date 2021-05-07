@@ -3,12 +3,14 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
 const helmet = require('helmet');
+require('dotenv').config();
 
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
 
 
-mongoose.connect('mongodb+srv://Mimoun:projet6@cluster0.co0uq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
+
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.co0uq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
